@@ -19,15 +19,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // This delegate does not imply the connecting scene or session are new (see `application:configurationForConnectingSceneSession` instead).
         guard let windowScene =  (scene as? UIWindowScene) else { return }
         if FirebaseAuth.Auth.auth().currentUser != nil {
+            
             let window = UIWindow(windowScene: windowScene)
-//            let storyboard = UIStoryboard(name: "LoginAndRegister", bundle: nil)
-//            let vc = storyboard.instantiateViewController(withIdentifier: "ConversationViewController") as! ConversationViewController
-//            let nv = UINavigationController(rootViewController: vc)
-//            window.rootViewController = nv
-//            self.window = window
-//            window.makeKeyAndVisible()
-            
-            
+            let storyboard = UIStoryboard(name: "ProfileAndConversation", bundle: nil)
+            let vc = storyboard.instantiateViewController(withIdentifier: "TabBarController") as! TabBarController
+            let nv = UINavigationController(rootViewController: vc)
+            window.rootViewController = nv
+            self.window = window
+            window.makeKeyAndVisible()
             
         }
     }

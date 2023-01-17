@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		303E9C64296439AC00A83F0C /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 303E9C63296439AC00A83F0C /* GoogleService-Info.plist */; };
 		303E9C6829645CCB00A83F0C /* DatabaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303E9C6729645CCB00A83F0C /* DatabaseManager.swift */; };
+		303E9C8D2965863D00A83F0C /* ProfileAndConversation.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 303E9C8C2965863D00A83F0C /* ProfileAndConversation.storyboard */; };
+		303E9C8F29658E7E00A83F0C /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 303E9C8E29658E7E00A83F0C /* TabBarController.swift */; };
 		305E271C2961DA0200CDF3FF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 305E271B2961DA0200CDF3FF /* AppDelegate.swift */; };
 		305E271E2961DA0200CDF3FF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 305E271D2961DA0200CDF3FF /* SceneDelegate.swift */; };
 		305E27202961DA0200CDF3FF /* ConversationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 305E271F2961DA0200CDF3FF /* ConversationViewController.swift */; };
@@ -29,6 +31,8 @@
 		0494AF9DBC48FCD424F4F09A /* Pods_Chat_Application.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Chat_Application.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		303E9C63296439AC00A83F0C /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		303E9C6729645CCB00A83F0C /* DatabaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatabaseManager.swift; sourceTree = "<group>"; };
+		303E9C8C2965863D00A83F0C /* ProfileAndConversation.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = ProfileAndConversation.storyboard; sourceTree = "<group>"; };
+		303E9C8E29658E7E00A83F0C /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		305E27182961DA0200CDF3FF /* Chat Application.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Chat Application.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		305E271B2961DA0200CDF3FF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		305E271D2961DA0200CDF3FF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -66,6 +70,16 @@
 				0494AF9DBC48FCD424F4F09A /* Pods_Chat_Application.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		303E9C8B296585B000A83F0C /* ProfileAndConversation */ = {
+			isa = PBXGroup;
+			children = (
+				30DF32D92962E6A90098DCD3 /* ProfileViewController.swift */,
+				305E271F2961DA0200CDF3FF /* ConversationViewController.swift */,
+				303E9C8E29658E7E00A83F0C /* TabBarController.swift */,
+			);
+			path = ProfileAndConversation;
 			sourceTree = "<group>";
 		};
 		305E270F2961DA0200CDF3FF = {
@@ -115,10 +129,9 @@
 			isa = PBXGroup;
 			children = (
 				30DF32E12962F13C0098DCD3 /* LoginAndRegister */,
-				30DF32D92962E6A90098DCD3 /* ProfileViewController.swift */,
-				30DF32DB2962E6F20098DCD3 /* VideoPlayerViewController.swift */,
+				303E9C8B296585B000A83F0C /* ProfileAndConversation */,
 				30DF32DD2962E7060098DCD3 /* PhotoViewerViewController.swift */,
-				305E271F2961DA0200CDF3FF /* ConversationViewController.swift */,
+				30DF32DB2962E6F20098DCD3 /* VideoPlayerViewController.swift */,
 				30DF32D72962E6710098DCD3 /* NewConversationViewController.swift */,
 			);
 			path = Controllers;
@@ -137,6 +150,7 @@
 			isa = PBXGroup;
 			children = (
 				305E27212961DA0200CDF3FF /* LoginAndRegister.storyboard */,
+				303E9C8C2965863D00A83F0C /* ProfileAndConversation.storyboard */,
 				305E27262961DA0400CDF3FF /* LaunchScreen.storyboard */,
 			);
 			path = Storyboards;
@@ -237,6 +251,7 @@
 				303E9C64296439AC00A83F0C /* GoogleService-Info.plist in Resources */,
 				305E27252961DA0400CDF3FF /* Assets.xcassets in Resources */,
 				305E27232961DA0200CDF3FF /* LoginAndRegister.storyboard in Resources */,
+				303E9C8D2965863D00A83F0C /* ProfileAndConversation.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -298,6 +313,7 @@
 				30DF32E02962ECF30098DCD3 /* Extensions.swift in Sources */,
 				30DF32DC2962E6F20098DCD3 /* VideoPlayerViewController.swift in Sources */,
 				305E271C2961DA0200CDF3FF /* AppDelegate.swift in Sources */,
+				303E9C8F29658E7E00A83F0C /* TabBarController.swift in Sources */,
 				305E271E2961DA0200CDF3FF /* SceneDelegate.swift in Sources */,
 				30DF32DE2962E7060098DCD3 /* PhotoViewerViewController.swift in Sources */,
 			);

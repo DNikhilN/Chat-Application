@@ -7,6 +7,8 @@
 
 import UIKit
 import FirebaseAuth
+import GoogleSignIn
+import Firebase
 
 class LoginViewController: UIViewController {
 
@@ -36,6 +38,52 @@ class LoginViewController: UIViewController {
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
 
+    @IBAction func googleSign(_ sender: UIButton) {
+        
+                guard let clientId = FirebaseApp.app()?.options.clientID else {return }
+                let config = GIDConfiguration(clientID: clientId)
+        
+        
+        
+        GIDSignIn.sharedInstance.signIn(with: config, presenting: self) { [unowned self] user, error in
+            if let error = error {
+                print(error)
+                return}
+            
+            guard let email = user?.profile?.email,let firstName = user?.profile?.givenName,let lastName = user?.profile?.familyName else {return}
+            
+            DatabaseManager.shared.userExists(with: email) { exsists in
+                if !exsists {
+                    DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName, lastName: lastName, emailAddress: email))
+                }
+            }
+            
+            guard let autentication = user?.authentication,let idToken = autentication.idToken else {return}
+            let credentials = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: autentication.accessToken)
+            
+            FirebaseAuth.Auth.auth().signIn(with: credentials) { authResult, error in
+                if authResult != nil,error == nil {
+                    print("credentials not geting \(String(describing: error))")
+                }
+                
+            }
+            
+            
+            print(credentials)
+            let storyboard = UIStoryboard(name: "ProfileAndConversation", bundle: nil)
+            let vc = storyboard.instantiateViewController(withIdentifier: "TabBarController") as! TabBarController
+            
+            let scenDele = self.view.window?.windowScene?.delegate as! SceneDelegate
+            
+            scenDele.window?.rootViewController = vc
+            
+            
+            
+        }
+        
+    }
+    
+    
     @IBAction func registerBtn(_ sender: UIButton) {
         
         let storyboard = UIStoryboard(name: "LoginAndRegister", bundle: nil)
@@ -81,8 +129,8 @@ class LoginViewController: UIViewController {
             let user = results.user
             print("logged in user \(user)")
             
-            let storyboard = UIStoryboard(name: "LoginAndRegister", bundle: nil)
-            let vc = storyboard.instantiateViewController(withIdentifier: "ConversationViewController") as! ConversationViewController
+            let storyboard = UIStoryboard(name: "ProfileAndConversation", bundle: nil)
+            let vc = storyboard.instantiateViewController(withIdentifier: "TabBarController") as! TabBarController
             
             let scenDele = self.view.window?.windowScene?.delegate as! SceneDelegate
             

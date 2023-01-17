@@ -15,7 +15,7 @@
  */
 
 #import "FirebaseDatabase/Sources/Realtime/FConnection.h"
-#import "FirebaseCore/Extension/FirebaseCoreInternal.h"
+#import "FirebaseCore/Sources/Private/FirebaseCoreInternal.h"
 #import "FirebaseDatabase/Sources/Constants/FConstants.h"
 
 typedef enum {

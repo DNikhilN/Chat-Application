@@ -16,8 +16,8 @@
 
 #import <Foundation/Foundation.h>
 
-#import "FirebaseAuth/Interop/FIRAuthInterop.h"
-#import "FirebaseCore/Extension/FirebaseCoreInternal.h"
+#import "FirebaseCore/Sources/Private/FirebaseCoreInternal.h"
+#import "Interop/Auth/Public/FIRAuthInterop.h"
 
 #import "FirebaseDatabase/Sources/Api/FIRDatabaseComponent.h"
 #import "FirebaseDatabase/Sources/Api/Private/FIRDatabaseQuery_Private.h"
@@ -32,14 +32,12 @@
 
 + (FIRDatabase *)database {
     if (![FIRApp isDefaultAppConfigured]) {
-        [NSException
-             raise:@"FIRAppNotConfigured"
-            format:@"The default FirebaseApp instance must be "
-                   @"configured before the default Database instance "
-                   @"can be initialized. One way to ensure this is to "
-                   @"call `FirebaseApp.configure()` in the App Delegate's "
-                   @"`application(_:didFinishLaunchingWithOptions:)` "
-                   @"(or the `@main` struct's initializer in SwiftUI)."];
+        [NSException raise:@"FIRAppNotConfigured"
+                    format:@"Failed to get default Firebase Database instance. "
+                           @"Must call `[FIRApp "
+                           @"configure]` (`FirebaseApp.configure()` in Swift) "
+                           @"before using "
+                           @"Firebase Database."];
     }
     return [FIRDatabase databaseForApp:[FIRApp defaultApp]];
 }
@@ -97,6 +95,7 @@
 }
 
 + (NSString *)buildVersion {
+    // TODO: Restore git hash when build moves back to git
     return [NSString stringWithFormat:@"%@_%s", FIRFirebaseVersion(), __DATE__];
 }
 
@@ -249,12 +248,10 @@
 }
 
 - (void)ensureRepo {
-    @synchronized(self) {
-        if (self.repo == nil) {
-            self.repo = [FRepoManager createRepo:self.repoInfo
-                                          config:self.config
-                                        database:self];
-        }
+    if (self.repo == nil) {
+        self.repo = [FRepoManager createRepo:self.repoInfo
+                                      config:self.config
+                                    database:self];
     }
 }
 

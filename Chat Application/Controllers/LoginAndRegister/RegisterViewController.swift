@@ -105,8 +105,8 @@ class RegisterViewController: UIViewController {
     
         }
         
-        let storyboard = UIStoryboard(name: "LoginAndRegister", bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: "ConversationViewController") as! ConversationViewController
+        let storyboard = UIStoryboard(name: "ProfileAndConversation", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "TabBarController") as! TabBarController
         
         let scenDele = self.view.window?.windowScene?.delegate as! SceneDelegate
         

@@ -377,7 +377,7 @@ priority is meant to be preserved, you should use setValue:andPriority: instead.
  */
 - (void)getDataWithCompletionBlock:
     (void (^_Nonnull)(NSError *__nullable error,
-                      FIRDataSnapshot *__nullable snapshot))block
+                      FIRDataSnapshot *snapshot))block
     NS_SWIFT_NAME(getData(completion:));
 
 #pragma mark - Detaching observers
