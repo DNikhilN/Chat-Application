@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import JGProgressHUD
 
 class RegisterViewController: UIViewController {
     
@@ -22,6 +23,7 @@ class RegisterViewController: UIViewController {
     let alert = UIAlertController(title: "Alert", message: "", preferredStyle: .alert)
     let action = UIAlertAction(title: "OK", style: .default)
     let imagePicker = UIImagePickerController()
+    let spinner = JGProgressHUD()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -85,33 +87,69 @@ class RegisterViewController: UIViewController {
             return
         }
         
+        spinner.show(in: view)
+        
+     
+        
         DatabaseManager.shared.userExists(with: email) { exists in
-            guard !exists else {
+            
+            DispatchQueue.main.async {
+                self.spinner.dismiss()
+            }
+            
+           
+           print(exists)
+            guard exists == false else {
                 self.alert.message = "user already exists with this email id"
                 self.present(self.alert, animated: true)
                 return
             }
             
+            UserDefaults.standard.set(email, forKey: "email")
+            
             FirebaseAuth.Auth.auth().createUser(withEmail: email, password: password) { authResults, error in
+                
                 guard authResults != nil, error == nil else{
                     self.alert.message = "Error creating user"
                     self.present(self.alert, animated: true)
                     return
                 }
               
-                DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName, lastName: lastName, emailAddress: email))
+                let chatUser = ChatAppUser(firstName: firstName, lastName: lastName, emailAddress: email)
+                DatabaseManager.shared.insertUser(with: chatUser) { succcess in
+                    if succcess {
+                        //upload image
+                        guard let image = self.profileImg.image,let data = image.pngData() else {return}
+                        
+                        let fileName = chatUser.profilePictureFileName
+                        StorageManager.shared.uploadProfilePicture(with: data, fileName: fileName) { result in
+                            switch result {
+                            case.success(let downloadUrl):
+                                UserDefaults.standard.setValue(downloadUrl, forKey: "profile_picture_url")
+                                self.chatScreen()
+                                print(downloadUrl)
+                            case .failure(let error):
+                            print("storage manager error: \(error)")
+                                
+                            }
+                        }
+                        
+                    }
+                }
             
         }
     
         }
         
+    }
+    
+   private func chatScreen(){
         let storyboard = UIStoryboard(name: "ProfileAndConversation", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "TabBarController") as! TabBarController
         
         let scenDele = self.view.window?.windowScene?.delegate as! SceneDelegate
         
         scenDele.window?.rootViewController = vc
-        
     }
     
     private func isValidEmail(_ email: String) -> Bool {

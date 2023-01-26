@@ -9,9 +9,10 @@ import UIKit
 import FirebaseAuth
 import GoogleSignIn
 import Firebase
+import JGProgressHUD
 
 class LoginViewController: UIViewController {
-
+    
     @IBOutlet weak var emailTF: UITextField!
     @IBOutlet weak var passwordTF: UITextField!
     @IBOutlet weak var loginBtn: UIButton!
@@ -19,11 +20,12 @@ class LoginViewController: UIViewController {
     
     let alert = UIAlertController(title: "Alert", message: "", preferredStyle: .alert)
     let action = UIAlertAction(title: "OK", style: .default)
+    let spinner = JGProgressHUD()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         alert.addAction(action)
- 
+        
         // Do any additional setup after loading the view.
     }
     
@@ -37,28 +39,73 @@ class LoginViewController: UIViewController {
         super.viewWillDisappear(true)
         navigationController?.setNavigationBarHidden(false, animated: false)
     }
-
+    
     @IBAction func googleSign(_ sender: UIButton) {
         
-                guard let clientId = FirebaseApp.app()?.options.clientID else {return }
-                let config = GIDConfiguration(clientID: clientId)
+       // spinner.show(in: view)
+        guard let clientId = FirebaseApp.app()?.options.clientID else {return }
+        let config = GIDConfiguration(clientID: clientId)
         
         
         
         GIDSignIn.sharedInstance.signIn(with: config, presenting: self) { [unowned self] user, error in
-            if let error = error {
-                print(error)
+            
+//            DispatchQueue.main.async {
+//                self.spinner.dismiss()
+//            }
+//
+            guard let autentication = user?.authentication,let idToken = autentication.idToken else {
+                print("failed to get user \(error)")
                 return}
+            
+            if let error = error {
+                print("hello babu\(error)")
+                return}
+            
+            
             
             guard let email = user?.profile?.email,let firstName = user?.profile?.givenName,let lastName = user?.profile?.familyName else {return}
             
+            UserDefaults.standard.set(email, forKey: "email")
+            
             DatabaseManager.shared.userExists(with: email) { exsists in
+                
                 if !exsists {
-                    DatabaseManager.shared.insertUser(with: ChatAppUser(firstName: firstName, lastName: lastName, emailAddress: email))
+                    
+                    let chatUser = ChatAppUser(firstName: firstName, lastName: lastName, emailAddress: email)
+                    DatabaseManager.shared.insertUser(with: chatUser) { succcess in
+                        if succcess {
+                            //upload image
+                            if ((user?.profile?.hasImage) != nil) {
+                                
+                                guard let url = user?.profile?.imageURL(withDimension: 200) else {return}
+                                
+                                URLSession.shared.dataTask(with: url) { data, _, _ in
+                                    guard let data  = data else {return}
+                                    
+                                    let fileName = chatUser.profilePictureFileName
+                                    StorageManager.shared.uploadProfilePicture(with: data, fileName: fileName) { result in
+                                        switch result {
+                                        case.success(let downloadUrl):
+                                            UserDefaults.standard.setValue(downloadUrl, forKey: "profile_picture_url")
+                                            print(downloadUrl)
+                                        case .failure(let error):
+                                            print("storage manager error: \(error)")
+                                            
+                                        }
+                                    }
+                                    
+                                    
+                                }.resume()
+                                
+                                
+                            }
+                        }
+                    }
                 }
             }
             
-            guard let autentication = user?.authentication,let idToken = autentication.idToken else {return}
+           
             let credentials = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: autentication.accessToken)
             
             FirebaseAuth.Auth.auth().signIn(with: credentials) { authResult, error in
@@ -120,7 +167,16 @@ class LoginViewController: UIViewController {
             return
         }
         
+        spinner.show(in: view)
+        
         FirebaseAuth.Auth.auth().signIn(withEmail: email, password: password) { authResults, error in
+            
+            DispatchQueue.main.async {
+                self.spinner.dismiss()
+            }
+            
+            UserDefaults.standard.set(email, forKey: "email")
+            
             guard let results = authResults,error == nil else {
                 self.alert.message = "check your email id and password"
                 self.present(self.alert, animated: true)
@@ -136,14 +192,14 @@ class LoginViewController: UIViewController {
             
             scenDele.window?.rootViewController = vc
             
-      
+            
         }
         
     }
     
     private func isValidEmail(_ email: String) -> Bool {
         let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-
+        
         let emailPred = NSPredicate(format:"SELF MATCHES %@", emailRegEx)
         return emailPred.evaluate(with: email)
     }
@@ -153,7 +209,7 @@ class LoginViewController: UIViewController {
         let passwordPred = NSPredicate(format: "SELF MATCHES %@", passwordRegex)
         return passwordPred.evaluate(with: password)
     }
-
     
-
+    
+    
 }
