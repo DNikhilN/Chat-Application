@@ -19,6 +19,10 @@ class ConversationViewController: UIViewController {
        
         // Do any additional setup after loading the view.
     }
+
+   
+    
+
     
     
     @IBAction func newConversationBtn(_ sender: UIButton) {
@@ -35,13 +39,16 @@ class ConversationViewController: UIViewController {
     private func createNewConversation(result:[String:String]){
         
         guard let name = result["name"],let email = result["email"] else {return}
-        let storyboard = UIStoryboard(name: "ProfileAndConversation", bundle: nil)
+       let storyboard = UIStoryboard(name: "ProfileAndConversation", bundle: nil)
+        //let vc =  ChatViewController()
         let vc = storyboard.instantiateViewController(withIdentifier: "ChatViewController") as! ChatViewController
         vc.isNewConversation = true
         vc.otherUserEmail = email
         vc.title = name
+//
+    navigationController?.pushViewController(vc, animated: true)
         
-        navigationController?.pushViewController(vc, animated: true)
+        
         
     }
     
@@ -67,8 +74,10 @@ extension ConversationViewController:UITableViewDelegate,UITableViewDataSource{
         tableview.deselectRow(at: indexPath, animated: true)
         
         let storyboard = UIStoryboard(name: "ProfileAndConversation", bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: "ChatViewController") as! ChatViewController
+       // let vc = ChatViewController(with: "email")
         
+        let vc = storyboard.instantiateViewController(withIdentifier: "ChatViewController") as! ChatViewController
+        vc.title = "hello"
         navigationController?.pushViewController(vc, animated: true)
         
     }

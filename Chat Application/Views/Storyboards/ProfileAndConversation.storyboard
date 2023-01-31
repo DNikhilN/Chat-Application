@@ -122,7 +122,7 @@
                             <constraint firstItem="hwm-nn-Oth" firstAttribute="trailing" secondItem="F3e-gt-Kf9" secondAttribute="trailing" id="yne-vc-kxG"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" title="Chat" id="s80-g2-aiK"/>
+                    <navigationItem key="navigationItem" title="Chat" largeTitleDisplayMode="always" id="s80-g2-aiK"/>
                     <connections>
                         <outlet property="tableview" destination="F3e-gt-Kf9" id="lx4-HP-3LD"/>
                     </connections>
@@ -189,10 +189,11 @@
                         <viewLayoutGuide key="safeArea" id="zma-s4-cAo"/>
                         <color key="backgroundColor" systemColor="systemOrangeColor"/>
                     </view>
+                    <navigationItem key="navigationItem" id="WLI-H7-Woj"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="V3j-RD-ydC" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="5938" y="-997"/>
+            <point key="canvasLocation" x="5138" y="-1715"/>
         </scene>
         <!--Tab Bar Controller-->
         <scene sceneID="haS-ws-EUs">

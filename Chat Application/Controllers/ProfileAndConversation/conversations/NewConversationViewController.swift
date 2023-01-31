@@ -20,7 +20,10 @@ class NewConversationViewController: UIViewController {
         super.viewDidLoad()
         searchbar.delegate = self
         loadingUsersFromDatabase()
-        
+//        let demo = ["name":"nikhil"]
+//        results.append(demo)
+//        tableview.delegate = self
+//        tableview.dataSource = self
         // Do any additional setup after loading the view.
     }
     
@@ -44,7 +47,12 @@ class NewConversationViewController: UIViewController {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        self.dismiss(animated: true, completion: nil)
+        let targetUserData = results[indexPath.row]
+        self.dismiss(animated: true, completion: { [weak self] in
+            self?.completeion?(targetUserData)
+            print("completion sucess")
+        })
+       
     }
     
 }
