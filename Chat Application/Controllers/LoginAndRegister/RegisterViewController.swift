@@ -89,7 +89,7 @@ class RegisterViewController: UIViewController {
         
         spinner.show(in: view)
         
-     
+     //vijay
         
         DatabaseManager.shared.userExists(with: email) { exists in
             
